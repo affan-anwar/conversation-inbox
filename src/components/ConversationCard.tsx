@@ -1,43 +1,59 @@
 import type { Conversation } from "../types/conversation";
 
-// this component shows one conversation row in the list
-// took the priority colors from tailwind docs and picked what looked good
-
 type Props = {
   conversation: Conversation;
   onClick: () => void;
+  isSelected: boolean;
 };
 
-function getPriorityColor(priority: string) {
-  if (priority === "critical") return "bg-red-500";
-  if (priority === "high") return "bg-orange-500";
-  if (priority === "medium") return "bg-yellow-500";
-  return "bg-gray-400";
+// priority badge colors, mapped to what looked readable on dark bg
+function getPriorityStyle(priority: string) {
+  if (priority === "critical") {
+    return "bg-red-500/15 text-red-400 border border-red-500/30";
+  }
+  if (priority === "high") {
+    return "bg-orange-500/15 text-orange-400 border border-orange-500/30";
+  }
+  if (priority === "medium") {
+    return "bg-yellow-500/15 text-yellow-400 border border-yellow-500/30";
+  }
+  return "bg-slate-500/15 text-slate-400 border border-slate-500/30";
 }
 
-function ConversationCard({ conversation, onClick }: Props) {
-  const priorityColor = getPriorityColor(conversation.priority);
+function ConversationCard({ conversation, onClick, isSelected }: Props) {
+  const priorityStyle = getPriorityStyle(conversation.priority);
 
   return (
     <div
       onClick={onClick}
-      className="flex items-center gap-3 p-4 border-b border-slate-700 cursor-pointer hover:bg-slate-800 transition-colors"
+      className={`bg-slate-900 border rounded-lg p-4 mb-3 cursor-pointer transition-colors ${
+        isSelected
+          ? "border-purple-500"
+          : "border-slate-800 hover:border-slate-700 hover:bg-slate-800/60"
+      }`}
     >
-      <span className={`w-2 h-2 rounded-full ${priorityColor}`}></span>
+      <div className="flex justify-between items-start gap-3">
+        <div className="flex-1 text-left">
+          <div className="flex items-center gap-2 mb-1">
+            <p className="text-white font-medium">{conversation.customerName}</p>
+            <span
+              className={`text-xs px-2 py-0.5 rounded-full ${priorityStyle}`}
+            >
+              {conversation.priority}
+            </span>
+          </div>
 
-      <div className="flex-1 text-left">
-        <div className="flex justify-between items-center">
-          <p className="text-white font-medium">{conversation.customerName}</p>
-          <span className="text-xs text-slate-400">
-            {conversation.waitTimeMinutes} min
-          </span>
+          <p className="text-sm text-slate-300 truncate">
+            {conversation.lastMessage}
+          </p>
+          <p className="text-xs text-slate-500 mt-1">
+            {conversation.escalationReason}
+          </p>
         </div>
-        <p className="text-sm text-slate-400 truncate">
-          {conversation.lastMessage}
-        </p>
-        <p className="text-xs text-slate-500 mt-1">
-          {conversation.escalationReason}
-        </p>
+
+        <span className="text-xs text-slate-500 whitespace-nowrap">
+          {conversation.waitTimeMinutes} min
+        </span>
       </div>
     </div>
   );

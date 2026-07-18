@@ -30,6 +30,41 @@ function ConversationList() {
     fetchConversations();
   }, []);
 
+  // keyboard navigation: up/down to move through the list, esc to close detail
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if (e.key === "Escape") {
+        setSelectedId(null);
+        return;
+      }
+
+      if (e.key !== "ArrowDown" && e.key !== "ArrowUp") {
+        return;
+      }
+
+      const currentIndex = filteredConversations.findIndex(
+        (c) => c.id === selectedId
+      );
+
+      if (e.key === "ArrowDown") {
+        const nextIndex =
+          currentIndex === -1
+            ? 0
+            : Math.min(currentIndex + 1, filteredConversations.length - 1);
+        setSelectedId(filteredConversations[nextIndex]?.id ?? null);
+      }
+
+      if (e.key === "ArrowUp") {
+        const prevIndex =
+          currentIndex === -1 ? 0 : Math.max(currentIndex - 1, 0);
+        setSelectedId(filteredConversations[prevIndex]?.id ?? null);
+      }
+    }
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  });
+
   async function fetchConversations() {
     setLoading(true);
     setError(false);
@@ -122,6 +157,11 @@ function ConversationList() {
         })}
       </div>
 
+      <p className="text-xs text-slate-500 mb-3">
+        Tip: use the up and down arrow keys to move between conversations,
+        and Esc to close the details panel.
+      </p>
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <div className="md:col-span-2">
           {filteredConversations.length === 0 ? (
@@ -133,6 +173,7 @@ function ConversationList() {
               <ConversationCard
                 key={conv.id}
                 conversation={conv}
+                isSelected={conv.id === selectedId}
                 onClick={() => setSelectedId(conv.id)}
               />
             ))
