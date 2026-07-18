@@ -3,6 +3,8 @@
 A triage inbox that helps CX agents quickly find and act on the customer
 conversations that need a human the most.
 
+**Live demo:** https://gorgeous-biscotti-20cc31.netlify.app
+
 ## Setup
 
 ```bash
@@ -41,7 +43,6 @@ lets the agent retry instead of silently failing.
 I scoped this to fit the ~2 evening budget instead of building everything I
 could think of. Specifically I left out:
 
-
 - **Auth / agent assignment / multiple queues** — explicitly out of scope in
   the brief, and would need a real backend to be meaningful.
 - **Real AI sentiment/summary features** — I could fake a sentiment score in
@@ -72,6 +73,7 @@ could think of. Specifically I left out:
 - State is kept local to `ConversationList` (conversations, loading, error,
   selected id, active filter) since nothing here needs to be shared outside
   this part of the tree yet.
+
 ## Known limitations
 
 - No pagination — fine for the small mock dataset, would need it for a real
