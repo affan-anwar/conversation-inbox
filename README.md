@@ -85,8 +85,16 @@ could think of. Specifically I left out:
 
 ## Time spent
 
-Roughly 2 evenings (~5-6 hours), split across:
-- Project setup, mock API, types (~1 hr)
-- List, card, loading/error/empty states (~1.5 hrs)
-- Detail panel + resolve action (~1.5 hrs)
-- Filter chips + keyboard nav + polish (~1.5 hrs)
+Roughly 5 hours, split across two evenings — in line with the assignment's
+suggested time budget.
+
+**Evening 1 (~2.5 hrs)**
+- Project setup: repo, Vite + React + TypeScript scaffold, Tailwind (~40 min)
+- Types, mock data, and MSW handlers for the fake API (~50 min)
+- Conversation list and card component, wired to the mock API (~1 hr)
+
+**Evening 2 (~2.5 hrs)**
+- Card UI polish — priority badges, spacing, dark theme (~30 min)
+- Detail panel with the Resolve action, including the failure path (~1 hr)
+- Priority filter chips and keyboard navigation (~40 min)
+- README, final testing, and cleanup (~40 min)
