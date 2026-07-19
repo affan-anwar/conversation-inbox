@@ -21,6 +21,7 @@ function getPriorityStyle(priority: string) {
 }
 
 function ConversationCard({ conversation, onClick, isSelected }: Props) {
+  const isResolved = conversation.status === "resolved";
   const priorityStyle = getPriorityStyle(conversation.priority);
 
   return (
@@ -36,18 +37,32 @@ function ConversationCard({ conversation, onClick, isSelected }: Props) {
         <div className="flex-1 text-left">
           <div className="flex items-center gap-2 mb-1">
             <p className="text-white font-medium">{conversation.customerName}</p>
-            <span
-              className={`text-xs px-2 py-0.5 rounded-full ${priorityStyle}`}
-            >
-              {conversation.priority}
-            </span>
+
+            {isResolved ? (
+              <span className="text-xs px-2 py-0.5 rounded-full bg-green-500/15 text-green-400 border border-green-500/30">
+                resolved
+              </span>
+            ) : (
+              <span
+                className={`text-xs px-2 py-0.5 rounded-full ${priorityStyle}`}
+              >
+                {conversation.priority}
+              </span>
+            )}
           </div>
 
-          <p className="text-sm text-slate-300 truncate">
-            {conversation.lastMessage}
-          </p>
+          {isResolved ? (
+            <p className="text-sm text-green-300">
+              Issue resolved — customer is happy 🙂
+            </p>
+          ) : (
+            <p className="text-sm text-slate-300 truncate">
+              {conversation.lastMessage}
+            </p>
+          )}
+
           <p className="text-xs text-slate-500 mt-1">
-            {conversation.escalationReason}
+            {isResolved ? "Thank you for the quick help!" : conversation.escalationReason}
           </p>
         </div>
 

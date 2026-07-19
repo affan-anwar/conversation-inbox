@@ -133,6 +133,14 @@ function ConversationList() {
       ? conversations
       : conversations.filter((c) => c.priority === activeFilter);
 
+  // split into active and resolved so resolved items show separately
+  const activeConversations = filteredConversations.filter(
+    (c) => c.status !== "resolved"
+  );
+  const resolvedConversations = filteredConversations.filter(
+    (c) => c.status === "resolved"
+  );
+
   const selectedConversation = conversations.find((c) => c.id === selectedId);
 
   return (
@@ -169,14 +177,32 @@ function ConversationList() {
               No conversations match this filter
             </div>
           ) : (
-            filteredConversations.map((conv) => (
-              <ConversationCard
-                key={conv.id}
-                conversation={conv}
-                isSelected={conv.id === selectedId}
-                onClick={() => setSelectedId(conv.id)}
-              />
-            ))
+            <>
+              {activeConversations.map((conv) => (
+                <ConversationCard
+                  key={conv.id}
+                  conversation={conv}
+                  isSelected={conv.id === selectedId}
+                  onClick={() => setSelectedId(conv.id)}
+                />
+              ))}
+
+              {resolvedConversations.length > 0 && (
+                <div className="mt-6">
+                  <p className="text-xs text-slate-500 mb-3 uppercase tracking-wide">
+                    Resolved
+                  </p>
+                  {resolvedConversations.map((conv) => (
+                    <ConversationCard
+                      key={conv.id}
+                      conversation={conv}
+                      isSelected={conv.id === selectedId}
+                      onClick={() => setSelectedId(conv.id)}
+                    />
+                  ))}
+                </div>
+              )}
+            </>
           )}
         </div>
 
